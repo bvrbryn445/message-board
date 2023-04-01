@@ -1,21 +1,25 @@
 var express = require('express');
 var router = express.Router();
 
-const messages = [
-	{
-		text: "Hi there!",
-		user: "Amando",
-		added: new Date()
-	},
-	{
-		text: "Hello World!",
-		user: "Charles",
-		added: new Date()
-	}
-];
+const Message = require('../models/message')
+
+// const messages = [
+// 	{
+// 		text: "Hi there!",
+// 		user: "Amando",
+// 		added: new Date()
+// 	},
+// 	{
+// 		text: "Hello World!",
+// 		user: "Charles",
+// 		added: new Date()
+// 	}
+// ];
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', async (req, res, next) => {
+	const messages = await Message.find({}) || []
+	console.log(messages)
 	res.render('index', { title: "Mini Messageboard", messages })
 });
 
@@ -23,13 +27,11 @@ router.get('/new', function (req, res, next) {
 	res.render('form')
 })
 
-router.post('/new', function (req, res, next) {
+router.post('/new', async (req, res, next) => {
 	const { message, user }  = req.body;
-	messages.push({
-		text: message,
-		user,
-		added: new Date()
-	})
+
+	const newMessage = new Message({ text: message, user });
+	await newMessage.save()
 	res.redirect('/')
 })
 
