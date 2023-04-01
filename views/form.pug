@@ -1,0 +1,10 @@
+block form
+form(method='post' action='/new')
+  h2 Add a new message
+  div
+    label(for='message') Message:
+    input(type='text' name='message')
+  div
+    label(for='user') User:
+    input(type='text' name='user')
+  button(type='submit') Submit
